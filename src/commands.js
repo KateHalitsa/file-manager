@@ -1,6 +1,6 @@
-/**/import { up, cd, ls } from './navigation.js';
+import { up, cd, ls } from './navigation.js';
 import { cat, add, rn, cp, mv, rm, mkdir } from './fileOperations.js';
-/*import { osInfo } from './osInfo.js';
+import { getEOL, getCpus, getHomedir, getUsername, getArchitecture } from './osInfo.js';/*
 import { calculateHash } from './hash.js';
 import { compress, decompress } from './compression.js';*/
 
@@ -47,10 +47,28 @@ export async function handleCommand(input, currentDir) {
                 await rm(currentDir, args[0]);
                 break;
 
-            /* case 'os':
-               await osInfo(args[0]);
-               break;
-/*         case 'hash':
+             case 'os':
+                switch (args[0]) {
+                    case '--EOL':
+                        getEOL();
+                        break;
+                    case '--cpus':
+                        getCpus();
+                        break;
+                    case '--homedir':
+                        getHomedir();
+                        break;
+                    case '--username':
+                        getUsername();
+                        break;
+                    case '--architecture':
+                        getArchitecture();
+                        break;
+                    default:
+                        console.log('Invalid input');
+                }
+                break;
+/*/*         case 'hash':
                await calculateHash(args[0]);
                break;
 
