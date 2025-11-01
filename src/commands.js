@@ -2,7 +2,7 @@ import { up, cd, ls } from './navigation.js';
 import { cat, add, rn, cp, mv, rm, mkdir } from './fileOperations.js';
 import { getEOL, getCpus, getHomedir, getUsername, getArchitecture } from './osInfo.js';
 import { calculateHash } from './hash.js';
-/*import { compress, decompress } from './compression.js';*/
+import { compress, decompress } from './compression.js';
 
 export async function handleCommand(input, currentDir) {
     const [command, ...args] = input.split(' ');
@@ -71,15 +71,15 @@ export async function handleCommand(input, currentDir) {
          case 'hash':
                await calculateHash(currentDir, args[0]);
                break;
-/*/*
+
            case 'compress':
-               await compress(args[0], args[1]);
+               await compress(currentDir,args[0], args[1]);
                break;
 
            case 'decompress':
-               await decompress(args[0], args[1]);
+               await decompress(currentDir,args[0], args[1]);
                break;
-
+/*/*
            case '.exit':
                return { exit: true };
            */
