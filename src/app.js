@@ -11,4 +11,4 @@ console.log(`Welcome to the File Manager, ${username}!`);
 let currentDir = os.homedir();
 console.log(`You are currently in ${currentDir}`);
 
-startCLI(username, currentDir);/**/
+startCLI(username, currentDir);
