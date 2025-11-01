@@ -79,6 +79,10 @@ export async function handleCommand(input, currentDir) {
            case 'decompress':
                await decompress(currentDir,args[0], args[1]);
                break;
+
+           case '.exit':
+               return { exit: true };
+
             default:
                 console.log('Invalid input');
         }
