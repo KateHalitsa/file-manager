@@ -32,19 +32,19 @@ export async function handleCommand(input, currentDir) {
                 break;
 
            case 'rn':
-                await rn(args[0], args[1]);
+                await rn(currentDir,args[0], args[1]);
                 break;
 
             case 'cp':
-                await cp(args[0], args[1]);
+                await cp(currentDir, args[0], args[1]);
                 break;
 
             case 'mv':
-                await mv(args[0], args[1]);
+                await mv(currentDir, args[0], args[1]);
                 break;
 
             case 'rm':
-                await rm(args[0]);
+                await rm(currentDir, args[0]);
                 break;
 
             /* case 'os':

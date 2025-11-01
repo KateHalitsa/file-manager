@@ -20,39 +20,61 @@ export async function add(currentDir, fileName) {
 }
 
 
-export async function rn(filePath, newName) {
+
+export async function rn(currentDir, fileName, newName) {
+    if (!fileName || !newName) return console.log('Invalid input');
+
+    const oldPath = path.join(currentDir, fileName);
+    const newPath = path.join(currentDir, newName);
+
     try {
-        const dir = path.dirname(filePath);
-        const newPath = path.join(dir, newName);
-        await fs.promises.rename(filePath, newPath);
+        await fs.promises.rename(oldPath, newPath);
     } catch {
         console.log('Operation failed');
     }
 }
 
 
-export async function cp(src, destDir) {
-    const fileName = path.basename(src);
-    const destPath = path.join(destDir, fileName);
-    const read = fs.createReadStream(src);
-    const write = fs.createWriteStream(destPath);
-    read.pipe(write);
-    read.on('error', () => console.log('Operation failed'));
-    write.on('error', () => console.log('Operation failed'));
-}
-
-export async function mv(src, destDir) {
-    await cp(src, destDir);
+export async function cp(currentDir, src, destDir) {
     try {
-        await fs.promises.unlink(src);
+        const srcPath = path.isAbsolute(src) ? src : path.join(currentDir, src);
+        const destDirPath = path.isAbsolute(destDir) ? destDir : path.join(currentDir, destDir);
+
+        const fileName = path.basename(src);
+        const destPath = path.join(destDirPath, fileName);
+
+        await fs.promises.access(srcPath, fs.constants.F_OK);
+
+        const readStream = fs.createReadStream(srcPath);
+        const writeStream = fs.createWriteStream(destPath);
+        readStream.pipe(writeStream);
+        await new Promise((resolve, reject) => {
+            readStream.on('error', reject);
+            writeStream.on('error', reject);
+            writeStream.on('finish', resolve);
+        });
     } catch {
         console.log('Operation failed');
     }
 }
 
-export async function rm(filePath) {
+export async function mv(currentDir, src, destDir) {
     try {
-        await fs.promises.unlink(filePath);
+        const srcPath = path.isAbsolute(src) ? src : path.join(currentDir, src);
+
+        await fs.promises.access(srcPath, fs.constants.F_OK);
+        await cp(currentDir, src, destDir);
+        await fs.promises.unlink(srcPath);
+    } catch {
+        console.log('Operation failed');
+    }
+}
+
+export async function rm(currentDir, filePath) {
+    try {
+        const srcPath = path.isAbsolute(filePath) ? filePath : path.join(currentDir, filePath);
+        await fs.promises.access(srcPath, fs.constants.F_OK);
+        await fs.promises.unlink(srcPath);
     } catch {
         console.log('Operation failed');
     }
