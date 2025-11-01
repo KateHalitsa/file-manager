@@ -1,8 +1,8 @@
-/**/import { up, cd, ls } from './navigation.js';
+import { up, cd, ls } from './navigation.js';
 import { cat, add, rn, cp, mv, rm, mkdir } from './fileOperations.js';
-/*import { osInfo } from './osInfo.js';
+import { getEOL, getCpus, getHomedir, getUsername, getArchitecture } from './osInfo.js';
 import { calculateHash } from './hash.js';
-import { compress, decompress } from './compression.js';*/
+import { compress, decompress } from './compression.js';
 
 export async function handleCommand(input, currentDir) {
     const [command, ...args] = input.split(' ');
@@ -32,39 +32,57 @@ export async function handleCommand(input, currentDir) {
                 break;
 
            case 'rn':
-                await rn(args[0], args[1]);
+                await rn(currentDir,args[0], args[1]);
                 break;
 
             case 'cp':
-                await cp(args[0], args[1]);
+                await cp(currentDir, args[0], args[1]);
                 break;
 
             case 'mv':
-                await mv(args[0], args[1]);
+                await mv(currentDir, args[0], args[1]);
                 break;
 
             case 'rm':
-                await rm(args[0]);
+                await rm(currentDir, args[0]);
                 break;
 
-            /* case 'os':
-               await osInfo(args[0]);
-               break;
-/*         case 'hash':
-               await calculateHash(args[0]);
+             case 'os':
+                switch (args[0]) {
+                    case '--EOL':
+                        getEOL();
+                        break;
+                    case '--cpus':
+                        getCpus();
+                        break;
+                    case '--homedir':
+                        getHomedir();
+                        break;
+                    case '--username':
+                        getUsername();
+                        break;
+                    case '--architecture':
+                        getArchitecture();
+                        break;
+                    default:
+                        console.log('Invalid input');
+                }
+                break;
+         case 'hash':
+               await calculateHash(currentDir, args[0]);
                break;
 
            case 'compress':
-               await compress(args[0], args[1]);
+               await compress(currentDir,args[0], args[1]);
                break;
 
            case 'decompress':
-               await decompress(args[0], args[1]);
+               await decompress(currentDir,args[0], args[1]);
                break;
 
            case '.exit':
                return { exit: true };
-           */
+
             default:
                 console.log('Invalid input');
         }
